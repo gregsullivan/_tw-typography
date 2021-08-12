@@ -21,7 +21,7 @@ function configToCss(config = {}) {
 }
 
 module.exports = plugin.withOptions(
-  ({ modifiers, className = 'prose' } = {}) => {
+  ({ modifiers, postTitleSelector = '.entry-title', postContentSelector = '.entry-content' } = {}) => {
     return function ({ addComponents, theme, variants }) {
       const DEFAULT_MODIFIERS = [
         'DEFAULT',
@@ -44,14 +44,48 @@ module.exports = plugin.withOptions(
         ...Object.keys(config).filter((modifier) => !DEFAULT_MODIFIERS.includes(modifier)),
       ])
 
+      if (false !== postContentSelector) {
+        addComponents(
+          all.map((modifier) => ({
+            [modifier === 'DEFAULT' ? `${postContentSelector}` : `${postContentSelector}-${modifier}`]: configToCss(
+              config[modifier]
+            ),
+          })),
+          variants('typography')
+        )
+      } else {
+        /*
+         * If postContentSelector is false, prepend selectors with `body`
+         * instead of a class. This allows the WordPress editor to use the
+         * generated styles as-is.
+         *
+         * The map function intentionally matches the code above to ease
+         * staying in sync with future changes to Tailwind Typography.
+         */
+        addComponents(
+          ['DEFAULT'].map((modifier) => ({
+            [`body`]: configToCss(
+              config[modifier]
+            ),
+          })),
+          variants('typography')
+        )
+      }
+
+      /*
+       * Use postTitleSelector to create an appropriate CSS ruleset for either
+       * the frontend or the editor.
+       */
+      const DEFAULT = merge(
+        {},
+        ...castArray( config.DEFAULT.css || {} ),
+      );
+
       addComponents(
-        all.map((modifier) => ({
-          [modifier === 'DEFAULT' ? `.${className}` : `.${className}-${modifier}`]: configToCss(
-            config[modifier]
-          ),
-        })),
-        variants('typography')
-      )
+        {
+          [postTitleSelector]: DEFAULT.h1,
+        },
+      );
     }
   },
   () => ({
