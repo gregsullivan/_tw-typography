@@ -45,4 +45,4 @@ module.exports = {
 };
 ```
 
-To find Tailwind Typography styles optimized for the WordPress editor, please see the `tailwind/tailwind-typography.config.js` file in the [_tw repository](https://github.com/gregsullivan/_tw)
+To find Tailwind Typography styles optimized for the WordPress editor, please see the `tailwind/tailwind-typography.config.js` file in the [_tw repository](https://github.com/gregsullivan/_tw).
