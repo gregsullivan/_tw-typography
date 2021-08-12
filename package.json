@@ -1,52 +1,18 @@
 {
   "name": "@_tw/typography",
-  "version": "0.4.1",
-  "description": "A fork of Tailwind Typography to support _tw's class name requirements.",
+  "version": "1.0.0",
+  "description": "A fork of Tailwind Typography to support _tw's requirements.",
   "main": "src/index.js",
   "files": [
-    "src/*.js",
-    "dist/"
+    "src/*.js"
   ],
   "repository": "https://github.com/gregsullivan/_tw-typography",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
-  "prettier": {
-    "printWidth": 100,
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "es5"
-  },
-  "scripts": {
-    "test": "jest",
-    "dev": "next dev demo",
-    "build": "next build demo",
-    "export": "next export demo",
-    "deploy": "npm run build && npm run export",
-    "start": "next start demo",
-    "prepublishOnly": "node scripts/build.js"
-  },
   "peerDependencies": {
     "tailwindcss": ">=2.0.0"
-  },
-  "devDependencies": {
-    "@mdx-js/loader": "^1.0.19",
-    "@mdx-js/mdx": "^1.6.6",
-    "@next/mdx": "^8.1.0",
-    "autoprefixer": "^10.2.1",
-    "clean-css": "^4.2.1",
-    "cssnano": "^4.1.10",
-    "dedent": "^0.7.0",
-    "highlight.js": "^10.4.1",
-    "jest": "^26.6.1",
-    "next": "10",
-    "postcss": "^8.2.3",
-    "prettier": "^2.1.2",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "snapshot-diff": "^0.8.1",
-    "tailwindcss": "^2.0.2"
   },
   "dependencies": {
     "lodash.castarray": "^4.4.0",
