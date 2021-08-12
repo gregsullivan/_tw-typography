@@ -1,13 +1,13 @@
 {
-  "name": "@tailwindcss/typography",
+  "name": "@_tw/typography",
   "version": "0.4.1",
-  "description": "A Tailwind CSS plugin for automatically styling plain HTML content with beautiful typographic defaults.",
+  "description": "A fork of Tailwind Typography to support _tw's class name requirements.",
   "main": "src/index.js",
   "files": [
     "src/*.js",
     "dist/"
   ],
-  "repository": "https://github.com/tailwindcss/typography",
+  "repository": "https://github.com/gregsullivan/_tw-typography",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
