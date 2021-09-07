@@ -11,7 +11,7 @@ The version number of this fork will be kept in sync with that of Tailwind Typog
 
 ## Usage
 
-For the frontend styles:
+For frontend styles:
 
 ```js
 // tailwind-frontend.config.js
@@ -28,7 +28,7 @@ module.exports = {
 };
 ```
 
-For the editor styles:
+For editor styles:
 
 ```js
 // tailwind-editor.config.js
