@@ -1,6 +1,6 @@
 {
   "name": "@_tw/typography",
-  "version": "1.0.0",
+  "version": "0.4.1",
   "description": "A fork of Tailwind Typography to support _tw's requirements.",
   "main": "src/index.js",
   "files": [
