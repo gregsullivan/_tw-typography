@@ -5,7 +5,7 @@ A fork of [Tailwind Typography](https://github.com/tailwindlabs/tailwindcss-typo
 * Removes the `className` argument, replacing it with separate arguments for `postTitleSelector` and `postContentSelector`
 * Uses a plain `body` selector when `postContentSelector` is `false`
 
-These changes generate editor styles compatible with the WordPress block editor and also apply Tailwind Typography's `h1` styles to headings with the appropriate post title selector (e.g., `.entry-title`) regardless of heading level.
+These changes generate editor styles compatible with the WordPress block editor and also apply Tailwind Typography’s `h1` styles to headings with the appropriate post title selector (e.g., `.entry-title`) regardless of heading level.
 
 The version number of this fork will be kept in sync with that of Tailwind Typography itself.
 
