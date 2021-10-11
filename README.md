@@ -20,10 +20,7 @@ module.exports = {
     require( './tailwind.config.js' ),
   ],
   plugins: [
-    require( '@tailwindcss/typography' )( {
-      postTitleSelector: '.entry-title',
-      postContentSelector: '.entry-content',
-    } ),
+    require( '@tailwindcss/typography' )(),
   ],
 };
 ```

@@ -21,7 +21,7 @@ function configToCss(config = {}) {
 }
 
 module.exports = plugin.withOptions(
-  ({ modifiers, postTitleSelector = '.entry-title', postContentSelector = '.entry-content' } = {}) => {
+  ({ modifiers, postTitleSelector = '.entry-title', postContentSelector = '.prose' } = {}) => {
     return function ({ addComponents, theme, variants }) {
       const DEFAULT_MODIFIERS = [
         'DEFAULT',
