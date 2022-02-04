@@ -1,5 +1,7 @@
 # \_tw Typography
 
+**Changes to Tailwind, Tailwind Typography and \_tw have made this fork of Tailwind Typography unnecessary, and it is no longer included in themes generated on [underscoretw.com](https://underscoretw.com). All code changes related to migrating to Tailwind 3 and deprecating this fork were committed on January 11, 2022; looking at [the repository as of that date](https://github.com/gregsullivan/_tw/tree/d03efc347fe8ecea2d5d8a22c484e0985734163d) will give you the best sense of what was changed if you would like to update a Tailwind 2 theme to Tailwind 3 in the same way.**
+
 A fork of [Tailwind Typography](https://github.com/tailwindlabs/tailwindcss-typography) that:
 
 * Removes the `className` argument, replacing it with separate arguments for `postTitleSelector` and `postContentSelector`
