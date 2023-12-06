@@ -1,49 +1,40 @@
 # \_tw Typography
 
-**Changes to Tailwind, Tailwind Typography and \_tw have made this fork of Tailwind Typography unnecessary, and it is no longer included in themes generated on [underscoretw.com](https://underscoretw.com). All code changes related to migrating to Tailwind 3 and deprecating this fork were committed on January 11, 2022; looking at [the repository as of that date](https://github.com/gregsullivan/_tw/tree/d03efc347fe8ecea2d5d8a22c484e0985734163d) will give you the best sense of what was changed if you would like to update a Tailwind 2 theme to Tailwind 3 in the same way.**
+A Tailwind CSS plugin that improves support for [Tailwind Typography](https://github.com/tailwindlabs/tailwindcss-typography) with the WordPress block editor by:
 
----
+* Adding support for the `is-style-lead` class alongside `lead` so that it can be used as a block style
+* Tweaking a handful of CSS rules to add styles not otherwise handled by Tailwind Typography (like citations) and to improve Tailwind Typography support in the absence of Tailwind’s base styles from Preflight.
 
-A fork of [Tailwind Typography](https://github.com/tailwindlabs/tailwindcss-typography) that:
-
-* Removes the `className` argument, replacing it with separate arguments for `postTitleSelector` and `postContentSelector`
-* Uses a plain `body` selector when `postContentSelector` is `false`
-
-These changes generate editor styles compatible with the WordPress block editor and also apply Tailwind Typography’s `h1` styles to headings with the appropriate post title selector (e.g., `.entry-title`) regardless of heading level.
-
-The version number of this fork will be kept in sync with that of Tailwind Typography itself.
+The version number of this plugin will be kept in sync with that of Tailwind Typography itself, as it will need to be tested for compatibility with each new Tailwind Typography release due to tight coupling with Tailwind Typography’s own code.
 
 ## Usage
 
-For frontend styles:
+`@_tw/typography` should always be included after `@tailwindcss/typography`:
 
 ```js
-// tailwind-frontend.config.js
-module.exports = {
-  presets: [
-    require( './tailwind.config.js' ),
-  ],
-  plugins: [
-    require( '@tailwindcss/typography' )(),
-  ],
-};
+// tailwind.config.js
+plugins: [
+	// Add Tailwind Typography.
+    require('@tailwindcss/typography'),
+
+    // Add additional Tailwind Typography styles.
+    require('@_tw/typography'),
+]
 ```
 
-For editor styles:
+`@_tw/typography` supports the same options as `@tailwindcss/typography`, but you need to set them for both plugins:
 
 ```js
-// tailwind-editor.config.js
-module.exports = {
-  presets: [
-    require( './tailwind.config.js' ),
-  ],
-  plugins: [
-    require( '@tailwindcss/typography' )( {
-      postTitleSelector: '.editor-post-title__block .editor-post-title__input',
-      postContentSelector: false,
-    } ),
-  ],
-};
-```
+// tailwind.config.js
+plugins: [
+	// Add Tailwind Typography with a custom class name.
+    require('@tailwindcss/typography')({
+      className: 'wysiwyg',
+    }),
 
-To find Tailwind Typography styles optimized for the WordPress editor, please see the `tailwind/tailwind-typography.config.js` file in the [_tw repository](https://github.com/gregsullivan/_tw).
+    // Add additional Tailwind Typography styles with a custom class name.
+    require('@_tw/typography')({
+      className: 'wysiwyg',
+    }),
+]
+```

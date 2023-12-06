@@ -1,23 +1,26 @@
 {
   "name": "@_tw/typography",
-  "version": "0.4.1-2",
-  "description": "A fork of Tailwind Typography to support _tw’s requirements.",
-  "main": "src/index.js",
-  "files": [
-    "src/*.js"
-  ],
+  "version": "0.5.0",
+  "description": "A Tailwind CSS plugin that adapts Tailwind Typography styles for the WordPress block editor.",
+  "main": "index.js",
   "repository": "https://github.com/gregsullivan/_tw-typography",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
+  "prettier": {
+    "printWidth": 100,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
   "peerDependencies": {
-    "tailwindcss": ">=2.0.0"
+    "tailwindcss": ">=3.0.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.1.2"
   },
   "dependencies": {
-    "lodash.castarray": "^4.4.0",
-    "lodash.isplainobject": "^4.0.6",
-    "lodash.merge": "^4.6.2",
-    "lodash.uniq": "^4.5.0"
+    "@tailwindcss/typography": "0.5.10"
   }
 }
