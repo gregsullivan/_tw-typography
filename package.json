@@ -1,6 +1,6 @@
 {
   "name": "@_tw/typography",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "A Tailwind CSS plugin that adapts Tailwind Typography styles for the WordPress block editor.",
   "main": "index.js",
   "repository": "https://github.com/gregsullivan/_tw-typography",
@@ -21,6 +21,8 @@
     "prettier": "^2.1.2"
   },
   "dependencies": {
-    "@tailwindcss/typography": "0.5.10"
+    "@tailwindcss/typography": "0.5.10",
+    "lodash.castarray": "^4.4.0",
+    "lodash.merge": "^4.6.2"
   }
 }
