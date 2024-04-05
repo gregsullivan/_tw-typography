@@ -177,6 +177,7 @@ module.exports = plugin.withOptions(
         ['figcaption'],
         ['strong'],
         ['em'],
+        ['kbd'],
         ['code'],
         ['pre'],
         ['ol'],
