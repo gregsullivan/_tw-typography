@@ -1,6 +1,6 @@
 # \_tw Typography
 
-A Tailwind CSS plugin that improves support for [Tailwind Typography](https://github.com/tailwindlabs/tailwindcss-typography) within the WordPress block editor by:
+A Tailwind CSS plugin created for [\_tw](https://underscoretw.com/) that improves support for [Tailwind Typography](https://github.com/tailwindlabs/tailwindcss-typography) within the WordPress block editor by:
 
 * Partially forking `@tailwindcss/typography`
 * Adding support for the `is-style-lead` class alongside `lead` so that it can be used as a block style
