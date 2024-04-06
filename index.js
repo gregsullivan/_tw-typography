@@ -5,6 +5,10 @@
  * paths from the original.
  */
 
+// Flag when CSS is being built specifically for the editor in _tw.
+const notACF =
+  'editor' === process.env._TW_TARGET ? ',[class~="acf-block-body"][class~="is-selected"] *' : ''
+
 const plugin = require('tailwindcss/plugin')
 const merge = require('lodash.merge')
 const castArray = require('lodash.castarray')
@@ -26,10 +30,10 @@ function inWhere(selector, { className, modifier, prefix }) {
   let [trailingPseudo, rebuiltSelector] = commonTrailingPseudos(selector)
 
   if (trailingPseudo) {
-    return `:where(${selectorPrefix}${rebuiltSelector}):not(:where([class~="${prefixedNot}"],[class~="${prefixedNot}"] *))${trailingPseudo}`
+    return `:where(${selectorPrefix}${rebuiltSelector}):not(:where([class~="${prefixedNot}"],[class~="${prefixedNot}"] *${notACF}))${trailingPseudo}`
   }
 
-  return `:where(${selectorPrefix}${selector}):not(:where([class~="${prefixedNot}"],[class~="${prefixedNot}"] *))`
+  return `:where(${selectorPrefix}${selector}):not(:where([class~="${prefixedNot}"],[class~="${prefixedNot}"] *${notACF}))`
 }
 
 function isObject(value) {
