@@ -7,7 +7,9 @@
 
 // Flag when CSS is being built specifically for the editor in _tw.
 const notACF =
-  'editor' === process.env._TW_TARGET ? ',[class~="acf-block-body"][class~="is-selected"] *' : ''
+  'editor' === process.env._TW_TARGET
+    ? ',[class~="acf-block-body"]:not([class~="acf-block-preview"]) *'
+    : ''
 
 const plugin = require('tailwindcss/plugin')
 const merge = require('lodash.merge')
