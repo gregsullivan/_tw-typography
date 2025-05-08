@@ -124,16 +124,10 @@ module.exports = plugin.withOptions(
         isObject(modifiers.DEFAULT) &&
         Array.isArray(modifiers.DEFAULT.css)
       ) {
+        /**
+         * Fix Typography issues in the editor and the front end.
+         */
         modifiers.DEFAULT.css.push({
-          /**
-           * Without Preflight, Tailwind doesn't apply a default border
-           * style of `solid` to all elements, so the border doesn't
-           * appear in the editor without this addition.
-           */
-          blockquote: {
-            borderLeftStyle: 'solid',
-          },
-
           /**
            * Styles for the `cite` element within `blockquote` elements.
            */
@@ -164,6 +158,35 @@ module.exports = plugin.withOptions(
             width: '100%',
           },
         })
+
+        /**
+         * Fix Typography issues in only the editor.
+         */
+        if ('editor' === process.env._TW_TARGET) {
+          modifiers.DEFAULT.css.push({
+            /**
+             * Without Preflight, Tailwind doesn't apply a default border
+             * style of `solid` to all elements, so the border doesn't
+             * appear in the editor without these additions.
+             */
+            blockquote: {
+              borderLeftStyle: 'solid',
+            },
+
+            'tbody tr': {
+              borderBottomStyle: 'solid',
+            },
+
+            /**
+             * The block editor nests the image element within a container
+             * element, so the `figure > *` selector isn’t applied.
+             */
+            'figure img': {
+              marginTop: '0',
+              marginBottom: '0',
+            },
+          })
+        }
       }
 
       let options = { className, prefix }
@@ -225,6 +248,65 @@ module.exports = plugin.withOptions(
           ),
         }))
       )
+
+      /**
+       * We need to override some block editor styles that have a higher
+       * specificity. For these, we’ll use `.${className} .wp-block-table`
+       * ahead of the element, and we’ll add them directly using
+       * `addComponents()`.
+       */
+      const directComponents = {}
+
+      /**
+       * In the block editor, we want to add dashed vertical lines so editors
+       * can differentiate between cells. In the front end, we want to remove
+       * all borders added via `.wp-block-table`.
+       */
+      if ('editor' === process.env._TW_TARGET) {
+        directComponents[`.${className} .wp-block-table td, .${className} .wp-block-table th`] = {
+          border: '1px dashed rgb(0 0 0 / 0.075)',
+          borderTop: 0,
+          borderBottom: 0,
+        }
+
+        directComponents[
+          `.${className} .wp-block-table td:first-child, .${className} .wp-block-table th:first-child`
+        ] = {
+          borderLeft: 0,
+        }
+
+        directComponents[
+          `.${className} .wp-block-table td:last-child, .${className} .wp-block-table th:last-child`
+        ] = {
+          borderRight: 0,
+        }
+      } else {
+        directComponents[`.${className} .wp-block-table td, .${className} .wp-block-table th`] = {
+          border: '0',
+        }
+      }
+
+      /**
+       * Override the border color for `thead` and `tfoot`.
+       */
+      directComponents[`.${className} .wp-block-table thead, .${className} .wp-block-table tfoot`] =
+        {
+          borderColor: 'var(--tw-prose-th-borders)',
+        }
+
+      /**
+       * Override the border width for `thead` and `tfoot`.
+       */
+      directComponents[`.${className} .wp-block-table thead`] = {
+        borderBottomWidth: '1px',
+      }
+
+      directComponents[`.${className} .wp-block-table tfoot`] = {
+        borderTopWidth: '1px',
+      }
+
+      // Add all your direct components
+      addComponents(directComponents)
     }
   },
   () => {
