@@ -1,6 +1,6 @@
 {
   "name": "@_tw/typography",
-  "version": "0.5.17",
+  "version": "0.5.18",
   "description": "A Tailwind CSS plugin that adapts Tailwind Typography styles for the WordPress block editor.",
   "main": "index.js",
   "repository": {
