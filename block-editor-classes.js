@@ -5,11 +5,11 @@
  * block editor. It also adds some helper classes so you can access the post
  * type when modifying the block editor’s appearance.
  *
- * To see this integrated in _tw, please review:
+ * To see how this is integrated in _tw, please review:
  * https://github.com/gregsullivan/_tw
  */
 
-// Set our target classes and the classes we’ll add to them.
+// Set our target classes and the new classes we’ll add alongside them.
 var targetClasses = {
   'edit-post-visual-editor__post-title-wrapper': ['entry-header'],
   'wp-block-post-title': ['entry-title'],
@@ -17,9 +17,41 @@ var targetClasses = {
 }
 
 wp.domReady(() => {
-  // Add the necessary Tailwind Typography classes to the block editor.
-  addTypographyClasses()
+  addEditorModeListener()
 })
+
+/**
+ * We want to listen for editor changes so that we can recreate our mutation
+ * observers after toggling from the code editor back to the visual editor. We
+ * use the first acknowledged `visual` reponse from `getEditorMode()` to add
+ * the mutation observers for the first time.
+ */
+function addEditorModeListener() {
+  let previousMode = ''
+
+  wp.data.subscribe(() => {
+    try {
+      const editorSelect = wp.data.select('core/editor')
+
+      if (!editorSelect) {
+        console.warn('Editor data not available.')
+        return
+      }
+
+      const currentMode = editorSelect.getEditorMode()
+
+      if (previousMode !== currentMode) {
+        if (currentMode === 'visual') {
+          addTypographyClasses()
+        }
+
+        previousMode = currentMode
+      }
+    } catch (error) {
+      console.error('Error monitoring editor mode:', error)
+    }
+  })
+}
 
 /**
  * Get the class for the current post type from the `body` element. (We would
