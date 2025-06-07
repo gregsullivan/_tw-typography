@@ -9,109 +9,13 @@
  * https://github.com/gregsullivan/_tw
  */
 
-// Set our target classes and the new classes we’ll add alongside them.
+/**
+ * Set our target classes and the new classes we’ll add alongside them.
+ */
 var targetClasses = {
   'edit-post-visual-editor__post-title-wrapper': ['entry-header'],
   'wp-block-post-title': ['entry-title'],
   'wp-block-post-content': ['entry-content', ...tailwindTypographyClasses],
-}
-
-wp.domReady(() => {
-  addEditorModeListener()
-})
-
-/**
- * We want to listen for editor changes so that we can recreate our mutation
- * observers after toggling from the code editor back to the visual editor. We
- * use the first acknowledged `visual` reponse from `getEditorMode()` to add
- * the mutation observers for the first time.
- */
-function addEditorModeListener() {
-  let previousMode = ''
-
-  wp.data.subscribe(() => {
-    try {
-      const editorSelect = wp.data.select('core/editor')
-
-      if (!editorSelect) {
-        console.warn('Editor data not available.')
-        return
-      }
-
-      const currentMode = editorSelect.getEditorMode()
-
-      if (previousMode !== currentMode) {
-        if (currentMode === 'visual') {
-          addTypographyClasses()
-        }
-
-        previousMode = currentMode
-      }
-    } catch (error) {
-      console.error('Error monitoring editor mode:', error)
-    }
-  })
-}
-
-/**
- * Get the class for the current post type from the `body` element. (We would
- * use `wp.data`, but it doesn't work reliably both inside and outside of the
- * post editor `iframe`.)
- */
-function getCurrentPostTypeClass() {
-  let currentClass = null
-
-  for (const classToCheck of document.body.classList) {
-    if (classToCheck.startsWith('post-type-')) {
-      currentClass = classToCheck
-      break
-    }
-  }
-
-  return currentClass
-}
-
-/**
- * Because Gutenberg’s `isEditorReady` function remains unstable,
- * we’ll use an interval to watch for the arrival of the elements we need.
- */
-function addTypographyClasses() {
-  const editorLoadedInterval = setInterval(function () {
-    // Wait until elements with all target classes are present.
-    if (
-      Object.keys(targetClasses).every(
-        (className) => document.getElementsByClassName(className).length
-      )
-    ) {
-      if (getCurrentPostTypeClass()) {
-        // Add the post type class throughout.
-        Object.values(targetClasses).forEach((className) =>
-          className.push(getCurrentPostTypeClass())
-        )
-      }
-
-      // Add the classes before creating the mutation observer.
-      Object.entries(targetClasses).forEach(([targetClass, classes]) => {
-        document.getElementsByClassName(targetClass)[0].classList.add(...classes)
-      })
-
-      // Add mutation observers to each element.
-      Object.keys(targetClasses).forEach((className) => {
-        mutationObserver.observe(document.querySelector('.' + className), {
-          attributes: true,
-          attributeFilter: ['class'],
-        })
-      })
-
-      // Stop the interval.
-      clearInterval(editorLoadedInterval)
-    } else if (document.getElementsByName('editor-canvas').length) {
-      // If the block editor has been loaded in an iframe, and this code
-      // is running outside of that iframe, stop the interval. (This code
-      // will run again inside the iframe.)
-      clearInterval(editorLoadedInterval)
-    }
-  }, 40)
 }
 
 /**
@@ -135,3 +39,130 @@ const mutationObserver = new MutationObserver(function (mutations) {
     })
   })
 })
+
+/**
+ * This file could be loaded in any of three contexts:
+ *
+ * - Legacy, no `<iframe>`: In this case, we need to set up a subscription so
+ *   that we can monitor `wp.data.select('core/editor')` for changes to
+ *   `visual` mode.
+ * - Modern, parent: We don’t need to set up any classes, but we add a
+ *   subscription; the subscription will be passed to an interval and
+ *   eventually cleared when the child `<iframe>` is detected.
+ * - Modern, child: Ideally we have everything we need immediately and we start
+ *   adding the classes right away. If something goes wrong, this will fall
+ *   back to the subscription.
+ */
+const editor = wp.data.select('core/editor')
+const isEmbeddedEditor = window !== window.parent
+let unsubscribe
+
+if (isEmbeddedEditor && editor && editor.getEditorMode && editor.getEditorMode() === 'visual') {
+  // Here, we’re running inside an `<iframe>`, and we have the editor mode.
+  findTargetClasses()
+} else {
+  // In cases where we’re not or don’t, we use `wp.data.subscribe()` to
+  // monitor the editor mode.
+  let lastEditorMode = null
+
+  unsubscribe = wp.data.subscribe(() => {
+    const editor = wp.data.select('core/editor')
+    const currentEditorMode = editor && editor.getEditorMode ? editor.getEditorMode() : null
+
+    if (currentEditorMode === 'visual' && currentEditorMode !== lastEditorMode) {
+      findTargetClasses()
+    }
+
+    lastEditorMode = currentEditorMode
+  })
+}
+
+/**
+ * Get the class for the current post type from the `body` element. (We would
+ * use `wp.data`, but it doesn't work reliably both inside and outside of the
+ * post editor `<iframe>`.)
+ */
+function getCurrentPostTypeClass() {
+  let currentClass = null
+
+  for (const classToCheck of document.body.classList) {
+    if (classToCheck.startsWith('post-type-')) {
+      currentClass = classToCheck
+      break
+    }
+  }
+
+  return currentClass
+}
+
+/**
+ * Because Gutenberg’s `isEditorReady` function remains unstable,
+ * we’ll use an interval to watch for the arrival of the elements we need.
+ */
+function findTargetClasses() {
+  if (
+    Object.keys(targetClasses).every(
+      (className) => document.getElementsByClassName(className).length
+    )
+  ) {
+    // If elements are already present, set up typography classes immediately
+    addTypographyClasses()
+  } else {
+    const editorLoadedInterval = setInterval(function () {
+      // Wait until elements with all target classes are present.
+      if (
+        Object.keys(targetClasses).every(
+          (className) => document.getElementsByClassName(className).length
+        )
+      ) {
+        addTypographyClasses()
+
+        // Stop the interval.
+        clearInterval(editorLoadedInterval)
+      } else if (document.getElementsByName('editor-canvas').length) {
+        // If the block editor has been loaded in an `<iframe>`, and
+        // this code is running outside of that `<iframe>`, stop the
+        // interval. (This code will run again inside the `<iframe>`.)
+        clearInterval(editorLoadedInterval)
+
+        // Unsubscribe from `wp.data.subscribe()`.
+        unsubscribe()
+      }
+    }, 40)
+  }
+}
+
+/**
+ * Add the classes to each element and then create a mutation observer to make
+ * sure they’re added again upon removal.
+ */
+function addTypographyClasses() {
+  const postTypeClass = getCurrentPostTypeClass()
+  if (postTypeClass) {
+    Object.values(targetClasses).forEach((classArray) => {
+      if (!classArray.includes(postTypeClass)) {
+        classArray.push(postTypeClass)
+      }
+    })
+  }
+
+  // Add the classes before creating the mutation observer.
+  Object.entries(targetClasses).forEach(([targetClass, classes]) => {
+    const element = document.getElementsByClassName(targetClass)[0]
+
+    if (element) {
+      element.classList.add(...classes)
+    }
+  })
+
+  // Add mutation observers to each element.
+  Object.keys(targetClasses).forEach((className) => {
+    const element = document.querySelector('.' + className)
+    if (element) {
+      mutationObserver.observe(element, {
+        attributes: true,
+        attributeFilter: ['class'],
+      })
+    }
+  })
+}
