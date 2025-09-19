@@ -12,10 +12,8 @@ const notACF =
     : ''
 
 const plugin = require('tailwindcss/plugin')
-const merge = require('lodash.merge')
-const castArray = require('lodash.castarray')
 const styles = require('@tailwindcss/typography/src/styles')
-const { commonTrailingPseudos } = require('@tailwindcss/typography/src/utils')
+const { commonTrailingPseudos, merge, castArray } = require('./utils')
 
 const computed = {
   // Reserved for future "magic properties", for example:
@@ -212,12 +210,16 @@ module.exports = plugin.withOptions(
         ['ol'],
         ['ul'],
         ['li'],
+        ['dl'],
+        ['dt'],
+        ['dd'],
         ['table'],
         ['thead'],
         ['tr'],
         ['th'],
         ['td'],
         ['img'],
+        ['picture'],
         ['video'],
         ['hr'],
 
