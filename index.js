@@ -13,7 +13,7 @@ const notACF =
 
 const plugin = require('tailwindcss/plugin')
 const styles = require('@tailwindcss/typography/src/styles')
-const { commonTrailingPseudos, merge, castArray } = require('./utils')
+const { commonTrailingPseudos, merge, castArray } = require('@tailwindcss/typography/src/utils')
 
 const computed = {
   // Reserved for future "magic properties", for example:
