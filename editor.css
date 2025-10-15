@@ -1,0 +1,40 @@
+:not(:where($(where-not))) {
+  /**
+     * Without Preflight, Tailwind doesn't apply a default border
+     * style of `solid` to all elements, so the border doesn't
+     * appear in the editor without these additions.
+     */
+  &:where(blockquote) {
+    border-left-style: solid;
+  }
+
+  &:where(tbody tr) {
+    border-bottom-style: solid;
+  }
+
+  /**
+     * The block editor nests the image element within a container
+     * element, so the `figure > *` selector isn’t applied.
+     */
+  &:where(figure img) {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+.wp-block-table td,
+.wp-block-table th {
+  border: 1px dashed rgb(0 0 0 / 0.075);
+  border-top: 0;
+  border-bottom: 0;
+}
+
+.wp-block-table td:first-child,
+.wp-block-table th:first-child {
+  border-left: 0;
+}
+
+.wp-block-table td:last-child,
+.wp-block-table th:last-child {
+  border-right: 0;
+}
