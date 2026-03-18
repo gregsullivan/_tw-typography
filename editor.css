@@ -12,15 +12,6 @@
     &:where(tbody tr) {
       border-bottom-style: solid;
     }
-
-    /**
-     * The block editor nests the image element within a container
-     * element, so the `figure > *` selector isn’t applied.
-     */
-    &:where(figure img) {
-      margin-top: 0;
-      margin-bottom: 0;
-    }
   }
 
   .wp-block-table td,

@@ -419,10 +419,15 @@
       vertical-align: top;
     }
 
-    &:where(figure > *) {
+    &:where(figure > *, figure img) {
       margin-top: 0;
       margin-bottom: 0;
     }
+
+    &:where(figure a) {
+      vertical-align: bottom;
+    }
+
     &:where(figcaption) {
       color: var(--tw-prose-captions);
       font-size: 0.875em;
@@ -791,7 +796,7 @@
       margin-bottom: 1.7142857em;
     }
 
-    &:where(figure > *) {
+    &:where(figure > *, figure img) {
       margin-top: 0;
       margin-bottom: 0;
     }
@@ -1040,7 +1045,7 @@
       margin-bottom: 2em;
     }
 
-    &:where(figure > *):not(:where($(where-not))) {
+    &:where(figure > *, figure img):not(:where($(where-not))) {
       margin-top: 0;
       margin-bottom: 0;
     }
@@ -1289,7 +1294,7 @@
       margin-bottom: 1.7777778em;
     }
 
-    &:where(figure > *):not(:where($(where-not))) {
+    &:where(figure > *, figure img):not(:where($(where-not))) {
       margin-top: 0;
       margin-bottom: 0;
     }
@@ -1538,7 +1543,7 @@
       margin-bottom: 2em;
     }
 
-    &:where(figure > *) {
+    &:where(figure > *, figure img) {
       margin-top: 0;
       margin-bottom: 0;
     }
@@ -1787,7 +1792,7 @@
       margin-bottom: 2em;
     }
 
-    &:where(figure > *) {
+    &:where(figure > *, figure img) {
       margin-top: 0;
       margin-bottom: 0;
     }
